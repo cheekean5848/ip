@@ -4,6 +4,7 @@ import com.duke.exception.DukeException;
 import com.duke.task.Deadline;
 import com.duke.task.Task;
 import com.duke.task.TaskList;
+import com.duke.task.Todo;
 import com.duke.util.Storage;
 
 import java.time.format.DateTimeParseException;
@@ -26,7 +27,17 @@ public class AddDeadlineCommand extends Command {
         try {
             String des = input.split(" /", 2)[0].split(" ", 2)[1];
             String date = input.split("/", 2)[1].split(" ", 2)[1];
-            tasks.add(new Deadline(des, date));
+            Deadline task = new Deadline(des, date);
+            for (int i=0; i<tasks.getCount(); i++) {
+                if (tasks.get(i) instanceof Deadline) {
+                    Deadline deadline = (Deadline) tasks.get(i);
+                    if (deadline.getDescription().equals(task.getDescription()) &&
+                            deadline.getDate().equals(task.getDate())) {
+                        return "You already have this task in your task list.";
+                    }
+                }
+            }
+            tasks.add(task);
             return "Got itm I've added this tasks:\n " + tasks.get(tasks.getCount()-1)
                     + "\n" + "Now you have " + tasks.getCount() + " tasks in the list.";
         } catch (DateTimeParseException e) {

@@ -26,7 +26,13 @@ public class AddToDoCommand extends Command {
             throw new DukeException("OOPS!!! The description of a todo cannot be empty.");
         }
         String des = ls[1];
-        tasks.add(new Todo(des));
+        Todo task = new Todo(des);
+        for (int i=0; i<tasks.getCount(); i++) {
+            if (tasks.get(i).getDescription().equals(task.getDescription())) {
+                return "You already have this task in your task list.";
+            }
+        }
+        tasks.add(task);
         return "Got itm I've added this tasks:\n " + tasks.get(tasks.getCount()-1)
                 + "\n" + "Now you have " + tasks.getCount() + " tasks in the list.";
     }
